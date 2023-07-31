@@ -8,6 +8,8 @@ import helper as help
 from elevenlabs import generate, play
 import json
 
+st.set_page_config(page_title ="TalkingRecipeBook", layout='centered')
+
 @st.cache_resource
 def load_model():
 	  return joblib.load("transformer.joblib")
@@ -26,7 +28,7 @@ model = load_model()
 embeddings = load_embeddings()
 sentences = load_sentences()
 
-st.set_page_config(page_title ="TalkingRecipeBook", layout='centered')
+
 
 help.set_bg_hack()
 
