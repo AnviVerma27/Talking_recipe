@@ -6,5 +6,4 @@ scikit-learn
 sentence-transformers
 pandas
 elevenlabs
-streamlit==0.84.1
-opencv-python==4.5.3.56
+streamlit
