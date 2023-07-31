@@ -8,9 +8,20 @@ import helper as help
 from elevenlabs import generate, play
 import json
 
-model = joblib.load('transformer.joblib')
-embeddings = joblib.load('embeddings.pkl')
-sentences = joblib.load('sentences.pkl')
+@st.cache
+def load_model():
+	  return joblib.load("transformer.joblib")
+ 
+@st.cache
+def load_embeddings():
+	  return joblib.load("embeddings.pkl")
+@st.cache
+def load_sentences():
+	  return joblib.load("sentences.pkl")
+    
+model = load_model()
+embeddings = load_embeddings()
+sentences = load_sentences()
 
 st.set_page_config(page_title ="TalkingRecipeBook", layout='centered')
 
