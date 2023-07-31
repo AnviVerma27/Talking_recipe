@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import helper as help
 from elevenlabs import generate, play
+import json
 
 model = joblib.load('transformer.joblib')
 embeddings = joblib.load('embeddings.pkl')
@@ -38,20 +39,25 @@ def predict():
     cosine_scores = cosine_similarity([encoded_name], embeddings)
     top_similar_dishes = np.argsort(cosine_scores, axis=1)[0][-5:][::-1]
     top_dish = np.argsort(cosine_scores, axis=1)[0][-1:][::-1]
-
+    
     for i in top_dish:
+        help.header2(df[df['title'] == sentences[i]]['title'].values[0])
         str=df[df['title'] == sentences[i]]['directions'].values[0]
         s=str.replace('[','')
         t=s.replace(']','')
         str1=t.replace('"','')
         list=str1.split(',')
         paragraph_length = 1
-        ing=df[df['title'] == sentences[i]]['ingredients'].values[0]
-        help.header3(ing)
+        array = json.loads(df[df['title'] == sentences[i]]['ingredients'].values[0])
+        help.header3("Ingredients-")
+        for element in array:
+            st.write(element)
+        
+        help.header3("Recipe-")
         paragraphs = [list[i:i+paragraph_length] for i in range(0, len(list), paragraph_length)]
         for paragraph in paragraphs:
             paragraph_text = ','.join(paragraph)
-            st.write(paragraph)
+            st.write(paragraph_text)
             text_to_speech(paragraph_text)
 
 def text_to_speech(text):
