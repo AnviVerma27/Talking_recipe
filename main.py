@@ -52,14 +52,34 @@ help.header3(text)
 help.header2("Enter the dish.....")
 
 paper_name = st.text_input("Input here")
+def load_embeddings_chunk(chunk_size=100):
+    if "embeddings" not in st.session_state:
+        # Open the file in binary mode
+        with open("embeddings.pkl", "rb") as f:
+            embeddings = []
+            while True:
+                try:
+                    # Load a chunk of embeddings
+                    chunk = joblib.load(f)
+                    embeddings.extend(chunk)
+                    if len(embeddings) >= chunk_size:
+                        break
+                except EOFError:
+                    break
+        st.session_state.embeddings = embeddings
+    return st.session_state.embeddings
 
 def predict():
     encoded_name = model.encode(paper_name)
+
+    # Load embeddings in chunks
+    embeddings = load_embeddings_chunk()
 
     cosine_scores = cosine_similarity([encoded_name], embeddings)
     top_dish = np.argsort(cosine_scores, axis=1)[0][-1:][::-1]
     
     for i in top_dish:
+
         help.header2(df[df['title'] == sentences[i]]['title'].values[0])
         str=df[df['title'] == sentences[i]]['directions'].values[0]
         s=str.replace('[','')
