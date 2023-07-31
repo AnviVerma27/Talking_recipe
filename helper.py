@@ -1,8 +1,5 @@
 import streamlit as st
 import base64 
-from datetime import date 
-import time 
-import cv2 
 
 def set_bg_hack():
     main_bg = "background.png"
