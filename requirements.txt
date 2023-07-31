@@ -1,0 +1,11 @@
+streamlit
+joblib
+torch
+numpy
+scikit-learn
+sentence-transformers
+pandas
+elevenlabs
+json
+streamlit==0.84.1
+opencv-python==4.5.3.56
