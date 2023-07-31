@@ -12,17 +12,21 @@ st.set_page_config(page_title ="TalkingRecipeBook", layout='centered')
 
 @st.cache_resource
 def load_model():
-	  return joblib.load("transformer.joblib")
- 
-@st.cache_data
+    return joblib.load("transformer.joblib")
 def load_embeddings():
-	  return joblib.load("embeddings.pkl")
-@st.cache_data
+    if "embeddings" not in st.session_state:
+        st.session_state.embeddings = joblib.load("embeddings.pkl")
+    return st.session_state.embeddings
+
 def load_sentences():
-	  return joblib.load("sentences.pkl")
-@st.cache_data
+    if "sentences" not in st.session_state:
+        st.session_state.sentences = joblib.load("sentences.pkl")
+    return st.session_state.sentences
+
 def load_dataset():
-	return pd.read_parquet('final_recipes.parquet')
+    if "dataset" not in st.session_state:
+        st.session_state.dataset = pd.read_parquet('final_recipes.parquet')
+    return st.session_state.dataset
 
 model = load_model()
 embeddings = load_embeddings()
@@ -53,7 +57,6 @@ def predict():
     encoded_name = model.encode(paper_name)
 
     cosine_scores = cosine_similarity([encoded_name], embeddings)
-    top_similar_dishes = np.argsort(cosine_scores, axis=1)[0][-5:][::-1]
     top_dish = np.argsort(cosine_scores, axis=1)[0][-1:][::-1]
     
     for i in top_dish:
