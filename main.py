@@ -8,17 +8,20 @@ import helper as help
 from elevenlabs import generate, play
 import json
 
-@st.cache
+@st.cache_resource
 def load_model():
 	  return joblib.load("transformer.joblib")
  
-@st.cache
+@st.cache_data
 def load_embeddings():
 	  return joblib.load("embeddings.pkl")
-@st.cache
+@st.cache_data
 def load_sentences():
 	  return joblib.load("sentences.pkl")
-    
+@st.cache_data
+def load_dataset():
+	return pd.read_parquet('final_recipes.parquet')
+
 model = load_model()
 embeddings = load_embeddings()
 sentences = load_sentences()
@@ -27,7 +30,7 @@ st.set_page_config(page_title ="TalkingRecipeBook", layout='centered')
 
 help.set_bg_hack()
 
-df = pd.read_parquet('final_recipes.parquet')
+df = load_dataset()
 
 title="""<center> Talking recipe book </center>"""
 
